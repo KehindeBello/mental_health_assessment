@@ -1,3 +1,5 @@
+from questions_mappings import questions, gad7_mapping, phq9_mapping, pss4_mapping
+
 def calculate_scores(phq9scores, gad7scores, pss4scores):
     phq9_normalized = sum(phq9scores) / 27
     gad7_normalized = sum(gad7scores) / 21
@@ -30,3 +32,23 @@ def interpret_results(phq9scores, phq9_normalized, gad7_normalized, pss4_normali
         result = "Severe concerns"
 
     return result, category[result]
+
+def collect_response(request):
+    form_data = request.form.to_dict()
+    mapped_response = {}
+    for question, response in form_data.items():
+        if question.startswith('phq9_'):
+            question_text = questions[question]
+            response_text = phq9_mapping[response]
+        elif question.startswith('gad7_'):
+            question_text = questions[question]
+            response_text = gad7_mapping[response]
+        elif question.startswith('pss_'):
+            question_text = questions[question]
+            response_text = pss4_mapping[response]
+        else:
+            continue
+        
+        mapped_response[question_text] = response_text
+    
+    return mapped_response
