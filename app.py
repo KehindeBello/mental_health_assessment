@@ -29,3 +29,7 @@ def submit():
     
     #you can direct the OpenAIresponse into the template. Assessment is the summary, interpretation is the explanation
     return render_template("result.html", assessment=result, interpretation=interpretation)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
