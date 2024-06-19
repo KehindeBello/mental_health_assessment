@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, render_template, request
+
+from openai_client import OpenAPIClient
 from utils import calculate_scores, interpret_results, collect_response
 
 app = Flask(__name__)
@@ -20,6 +22,7 @@ def submit():
 
     #response json
     response_json = collect_response(request)
+    system_response = OpenAPIClient.query_responses(response_json)
     
     #OpenAI -takes response json
 
@@ -28,7 +31,7 @@ def submit():
     result, interpretation = interpret_results(phq9scores, phq9_normalized, gad7_normalized, pss4_normalized, aggregate_score)
     
     #you can direct the OpenAIresponse into the template. Assessment is the summary, interpretation is the explanation
-    return render_template("result.html", assessment=result, interpretation=interpretation)
+    return render_template("result.html", assessment=result, small_interpretation=interpretation, interpretation=system_response)
 
 
 if __name__ == '__main__':

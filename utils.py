@@ -33,9 +33,10 @@ def interpret_results(phq9scores, phq9_normalized, gad7_normalized, pss4_normali
 
     return result, category[result]
 
+
 def collect_response(request):
     form_data = request.form.to_dict()
-    mapped_response = {}
+    mapped_response = []
     for question, response in form_data.items():
         if question.startswith('phq9_'):
             question_text = questions[question]
@@ -48,7 +49,10 @@ def collect_response(request):
             response_text = pss4_mapping[response]
         else:
             continue
-        
-        mapped_response[question_text] = response_text
+
+        mapped_response.append({
+            'question': question_text,
+            'response': response_text
+        })
     
     return mapped_response
